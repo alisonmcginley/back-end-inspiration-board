@@ -34,3 +34,5 @@ def get_board():
         boards_response.append(board.to_json())
 
     return jsonify(boards_response), 200   
+
+
