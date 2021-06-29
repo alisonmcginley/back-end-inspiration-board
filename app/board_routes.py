@@ -40,7 +40,7 @@ def get_cards(board_id):
 
     cards = []
     for card in board.cards:
-        cards.append(card.to_json())
+        cards.append(card.card_to_json())
 
     return board.to_json_with_cards(cards), 200
 
