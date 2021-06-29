@@ -47,13 +47,11 @@ def get_cards(board_id):
 @boards_bp.route("/<board_id>/cards", methods=["POST"], strict_slashes=False)
 def post_card_to_board(board_id):
     request_body = request.get_json()
-    # card = Card.query.get(request_body["card_id"])
     new_card = Card(message = request_body["message"], board_id = request_body["board_id"])
     if "message" not in request_body.keys() or "board_id" not in request_body.keys():
         return {"details": "Invalid data"},400
     db.session.add(new_card)
     db.session.commit()
-
     return make_response(new_card.card_to_json(), 200)
 
 
