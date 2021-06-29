@@ -9,7 +9,8 @@ class Board(db.Model):
     def to_json(self):
         return {
             "title": self.title,
-            "owner": self.owner
+            "owner": self.owner,
+            "board_id" : self.board_id
         }
 
     def to_json_with_tasks(self, cards):
