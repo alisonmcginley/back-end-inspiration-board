@@ -16,7 +16,7 @@ def create_board():
     db.session.add(new_board)
     db.session.commit()
 
-    return {new_board.to_json()}, 201
+    return new_board.to_json(), 201
 
 @boards_bp.route("", methods=["GET"], strict_slashes=False)
 def get_board():
@@ -51,8 +51,8 @@ def post_card_to_board(board_id):
     new_card = Card(message = request_body["message"], board_id = request_body["board_id"])
     if "message" not in request_body.keys() or "board_id" not in request_body.keys():
         return {"details": "Invalid data"},400
-    card.board_id = board_id
 
+    db.session.add(new_card)
     db.session.commit()
 
     return make_response(new_card.card_to_json(), 200)
