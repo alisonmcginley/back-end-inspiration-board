@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response
 from app import db
 from app.models.board import Board
+from app.models.card import Card
 
 boards_bp = Blueprint("boards", __name__, url_prefix="/boards")
 
@@ -45,6 +46,19 @@ def get_cards(board_id):
         cards.append(card.to_json())
 
     return board.to_json_with_cards(cards), 200
+
+@boards_bp.route("/<board_id>/cards", methods=["POST"], strict_slashes=False)
+def post_card_to_board(board_id):
+    request_body = request.get_json()
+    card = Card.query.get(request_body["card_id"])
+    if "message" not in request_body.keys() or "board_id" not in request_body.keys():
+        return {"details": "Invalid data"},400
+    card.board_id = board_id
+
+    db.session.commit()
+
+    return make_response(card.card_to_json(), 200)
+
 
 
 
