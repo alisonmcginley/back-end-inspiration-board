@@ -8,9 +8,8 @@ boards_bp = Blueprint("boards", __name__, url_prefix="/boards")
 def create_board():
     request_body = request.get_json()
 
-    if "title" not in request_body.keys() and
-    "owner" not in request_body.keys():
-        return {},400
+    if "title" not in request_body.keys() or "owner" not in request_body.keys():
+        return {"details": "Invalid data"},400
 
     new_board = Board(title = request_body["title"], owner = request_body["owner"])
     db.session.add(new_board)
@@ -21,3 +20,17 @@ def create_board():
         "owner": new_board.to_json()
     }, 201
 
+@boards_bp.route("", methods=["GET"], strict_slashes=False)
+def get_board():
+    title_from_url = request.args.get("title")
+
+    if title_from_url:
+        boards = Board.query.filter_by(title = title_from_url)
+
+    boards = Board.query.all()
+
+    boards_response = []
+    for board in boards:
+        boards_response.append(board.to_json())
+
+    return jsonify(boards_response), 200   
