@@ -56,8 +56,3 @@ def post_card_to_board(board_id):
     db.session.commit()
 
     return make_response(new_card.card_to_json(), 200)
-
-
-
-
-
