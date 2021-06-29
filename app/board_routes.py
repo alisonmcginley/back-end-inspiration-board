@@ -35,4 +35,16 @@ def get_board():
 
     return jsonify(boards_response), 200   
 
+@boards_bp.route("<board_id>/cards", methods=["GET"], strict_slashes=False)
+def get_cards(board_id):
+
+    board =Board.query.get_or_404(board_id)
+
+    cards = []
+    for card in board.cards:
+        cards.append(card.to_json())
+
+    return board.to_json_with_cards(cards), 200
+
+
 
