@@ -16,10 +16,7 @@ def create_board():
     db.session.add(new_board)
     db.session.commit()
 
-    return {
-        "title": new_board.to_json(),
-        "owner": new_board.to_json()
-    }, 201
+    return {new_board.to_json()}, 201
 
 @boards_bp.route("", methods=["GET"], strict_slashes=False)
 def get_board():
@@ -50,14 +47,14 @@ def get_cards(board_id):
 @boards_bp.route("/<board_id>/cards", methods=["POST"], strict_slashes=False)
 def post_card_to_board(board_id):
     request_body = request.get_json()
-    card = Card.query.get(request_body["card_id"])
+    # card = Card.query.get(request_body["card_id"])
+    new_card = Card(message = request_body["message"], board_id = request_body["board_id"])
     if "message" not in request_body.keys() or "board_id" not in request_body.keys():
         return {"details": "Invalid data"},400
-    card.board_id = board_id
-
+    db.session.add(new_card)
     db.session.commit()
 
-    return make_response(card.card_to_json(), 200)
+    return make_response(new_card.card_to_json(), 200)
 
 
 
