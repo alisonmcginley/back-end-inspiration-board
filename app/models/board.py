@@ -13,7 +13,7 @@ class Board(db.Model):
             "board_id" : self.board_id
         }
 
-    def to_json_with_tasks(self, cards):
+    def to_json_with_cards(self, cards):
         return {
             "title": self.title,
             "owner": self.owner,
