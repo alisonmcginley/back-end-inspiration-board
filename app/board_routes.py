@@ -18,10 +18,7 @@ def create_board():
     db.session.add(new_board)
     db.session.commit()
 
-    response = make_response(new_board.to_json(), 201)
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    print(response);
-    return response;
+    return make_response(new_board.to_json(), 201)
 
 @boards_bp.route("", methods=["GET"], strict_slashes=False)
 def get_board():
@@ -55,8 +52,8 @@ def get_cards(board_id):
 def post_card_to_board(board_id):
     request_body = request.get_json()
 
-    new_card = Card(message = request_body["message"], board_id = request_body["board_id"])
-    if "message" not in request_body.keys() or "board_id" not in request_body.keys():
+    new_card = Card(message=request_body["message"], board_id=board_id)
+    if "message" not in request_body.keys() or not board_id:
         return {"details": "Invalid data"},400
 
     db.session.add(new_card)
