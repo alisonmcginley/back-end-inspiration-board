@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, make_response
 from app import db
 from app.models.board import Board
 from app.models.card import Card
+from flask_cors import cross_origin
 
 boards_bp = Blueprint("boards", __name__, url_prefix="/boards")
 
 @boards_bp.route("", methods=["POST"], strict_slashes=False)
+@cross_origin()
 def create_board():
     request_body = request.get_json()
 
@@ -16,7 +18,10 @@ def create_board():
     db.session.add(new_board)
     db.session.commit()
 
-    return make_response(new_board.to_json(), 201)
+    response = make_response(new_board.to_json(), 201)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    print(response);
+    return response;
 
 @boards_bp.route("", methods=["GET"], strict_slashes=False)
 def get_board():
